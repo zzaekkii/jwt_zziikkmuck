@@ -1,5 +1,6 @@
 package com.example.yoomeejwt.config;
 
+import com.example.yoomeejwt.jwt.JwtFilter;
 import com.example.yoomeejwt.jwt.JwtUtil;
 import com.example.yoomeejwt.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,9 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "signup").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
+
+        http.
+                addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
 
         // 폼 로그인이 없어 동작하지 않는 필터를 대신할 커스텀 로그인 필터 등록.
         http
