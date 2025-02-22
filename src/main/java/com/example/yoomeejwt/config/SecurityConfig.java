@@ -1,5 +1,6 @@
 package com.example.yoomeejwt.config;
 
+import com.example.yoomeejwt.jwt.JwtUtil;
 import com.example.yoomeejwt.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,8 @@ public class SecurityConfig {
 
     // manager에 인자로 넣을 authConfiguration 객체.
     private final AuthenticationConfiguration authenticationConfiguration;
+
+    private final JwtUtil jwtUtil;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -57,7 +60,7 @@ public class SecurityConfig {
 
         // 폼 로그인이 없어 동작하지 않는 필터를 대신할 커스텀 로그인 필터 등록.
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // 세션 설정.
         http
